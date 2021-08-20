@@ -1,0 +1,24 @@
+{
+  "name": "@camilab/core",
+  "version": "1.0.0",
+  "description": "Core business logic",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.6.0",
+    "jest": "^27.0.6",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^27.0.4",
+    "ts-node": "^10.2.0",
+    "typescript": "^4.3.5"
+  },
+  "scripts": {
+    "build": "rimraf ./build && tsc",
+    "test": "jest"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
+  }
+}
