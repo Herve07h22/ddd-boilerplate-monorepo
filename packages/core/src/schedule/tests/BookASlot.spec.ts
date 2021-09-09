@@ -37,10 +37,16 @@ it("A registered user can book a free slot with Dr Frankenstein", () => {
 });
 
 it("It's easy to register some middlewares to the command bus", () => {
+  const userRepository = new MemoryUserRepository();
   const app = App({
     sheduleNotebook: new MemoryScheduleRepository(),
-    userRepository: new MemoryUserRepository(),
+    userRepository,
     emailService: new FakeEmailService(),
+  });
+  // Lets simulate that Joe is logged in
+  userRepository.setTokenForUser({
+    token: "verysecrettoken",
+    username: "Joe",
   });
 
   // Now the system is wired. Let's test an incoming command

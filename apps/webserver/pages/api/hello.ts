@@ -1,18 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { CommandResponse } from "@camilab/core/src/infra/command/Command";
-import { MemoryUserRepository } from "@camilab/core/src/authentication/tests/MemoryUserRepository";
-import { FakeEmailService } from "@camilab/core/src/services/email/FakeEmailService";
-import { MemoryScheduleRepository } from "@camilab/core/src/schedule/tests/MemoryScheduleRepository";
-import { App } from "@camilab/core/src/App";
-
+import { app } from "../../app/app";
 import { BookASlotCommand } from "@camilab/core/src/schedule/commands/BookASlot";
-
-const app = App({
-  sheduleNotebook: new MemoryScheduleRepository(),
-  userRepository: new MemoryUserRepository(),
-  emailService: new FakeEmailService(),
-});
 
 export default function handler(
   req: NextApiRequest,

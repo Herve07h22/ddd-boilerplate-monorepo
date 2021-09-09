@@ -1,4 +1,5 @@
 import { User } from "../../authentication/entities/User";
+import { UserRepository } from "../../authentication/repository/UserRepository";
 import { CommandName } from "../Commands";
 import { BaseEvent } from "../events/Event";
 
@@ -20,9 +21,9 @@ export const makeCommandResponse = {
     ({ status: "ok", value: "", error: "", events } as CommandResponse),
 };
 
-export type CommandHandler<T> = (dependencies: {}) => (
-  command: T
-) => CommandResponse;
+export type CommandHandler<T> = (
+  dependencies: any
+) => (command: T) => CommandResponse;
 
 export interface NamedCommand<T extends CommandName, P> {
   type: T;

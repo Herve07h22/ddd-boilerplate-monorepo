@@ -34,5 +34,5 @@ export const BookASlotHandler: CommandHandler<BookASlotCommand> =
         user: command.user,
       },
     };
-    return makeCommandResponse.withValue("Tout va bien", event);
+    return makeCommandResponse.withValue("Job done", event);
   };
