@@ -29,43 +29,56 @@ export const fakeEmployeeRepository: () => EmployeeRepository = () => {
   };
 };
 
-export class Option<A> {
-  constructor(private value?: A, private nothing?: string) {}
+// cascading ifs
+export function printInformationWithoutFunctor(
+  employeeName: string,
+  employeeRepository: EmployeeRepository = fakeEmployeeRepository()
+) {
+  const id = employeeRepository.getIdByName(employeeName);
+  if (id) {
+    const dept = employeeRepository.getDeptById(id);
+    const salary = employeeRepository.getSalaryById(id);
+    if (dept && salary) {
+      return `${employeeName} in ${dept} dept makes ${salary} per month.`;
+    }
+  }
+  return `${employeeName} in unknown dept dept makes unknown salary per month.`;
+}
+
+// Let's code it with a functor
+export class SimpleOption<A> {
+  constructor(public value?: A) {}
   static of<A>(value?: A) {
-    return new Option(value, "Nothing");
+    return new SimpleOption(value);
   }
   isNothing() {
     return this.value === null || this.value === undefined;
   }
-  toValue() {
-    return this.isNothing() ? this.nothing || "Nothing" : this.value;
-  }
-  ifNothing(nothing?: string) {
-    this.nothing = nothing;
-    return this;
-  }
-  map<B>(fn: (x: A) => B | undefined): Option<B> {
+  flatMap<B>(fn: (x: A) => B | undefined): SimpleOption<B> {
     if (this.isNothing()) {
-      return Option.of<B>().ifNothing(this.nothing);
+      return SimpleOption.of<B>();
     } else {
-      return Option.of(fn(this.value as A)).ifNothing(this.nothing);
+      return SimpleOption.of(fn(this.value as A));
     }
+  }
+  map<B>(fn: (x: A | undefined) => B): B {
+    return fn(this.value);
   }
 }
 
-export function printInformation(
+export function printInformationWithFunctor(
   employeeName: string,
   employeeRepository: EmployeeRepository = fakeEmployeeRepository()
 ) {
-  const dept = Option.of(employeeName)
-    .ifNothing("unknown dept") // Add a label to undefined/null value
-    .map(employeeRepository.getIdByName) // getIdByName might return undefined !
-    .map(employeeRepository.getDeptById);
+  const deptDisplay = SimpleOption.of(employeeName)
+    .flatMap(employeeRepository.getIdByName) // getIdByName might return undefined !
+    .flatMap(employeeRepository.getDeptById)
+    .map((dept) => dept || "unknown");
 
-  const salary = Option.of(employeeName)
-    .ifNothing("unknown salary")
-    .map(employeeRepository.getIdByName)
-    .map(employeeRepository.getSalaryById);
+  const salaryDisplay = SimpleOption.of(employeeName)
+    .flatMap(employeeRepository.getIdByName)
+    .flatMap(employeeRepository.getSalaryById)
+    .map((salary) => salary || "unknown");
 
-  return `${employeeName} in ${dept.toValue()} dept makes ${salary.toValue()} per month.`;
+  return `${employeeName} in ${deptDisplay} dept makes ${salaryDisplay} per month.`;
 }

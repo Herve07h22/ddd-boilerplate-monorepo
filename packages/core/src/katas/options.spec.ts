@@ -1,7 +1,8 @@
 import {
   EmployeeRepository,
   fakeEmployeeRepository,
-  printInformation,
+  printInformationWithoutFunctor,
+  printInformationWithFunctor,
 } from "./options";
 
 it("We can use a fake repository", () => {
@@ -10,13 +11,17 @@ it("We can use a fake repository", () => {
 });
 
 it("We print informations about a existing employee", () => {
-  const value = printInformation("Alice");
+  const value = printInformationWithoutFunctor("Alice");
   expect(value).toEqual("Alice in Sales dept makes 3000 per month.");
+  const valueSimple = printInformationWithFunctor("Alice");
+  expect(valueSimple).toEqual("Alice in Sales dept makes 3000 per month.");
 });
 
 it("We print informations about a unknown employee", () => {
-  const value = printInformation("Mike");
+  const value = printInformationWithoutFunctor("Mike");
   expect(value).toEqual(
     "Mike in unknown dept dept makes unknown salary per month."
   );
+  const valueSimple = printInformationWithFunctor("Mike");
+  expect(valueSimple).toEqual("Mike in unknown dept makes unknown per month.");
 });
