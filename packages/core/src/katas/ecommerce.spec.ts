@@ -19,7 +19,7 @@ it("On peut ajouter 2kg de tomates et 1 kiwi", () => {
     stock: stockApresClient1,
   } = checkout(panierClient1, stock);
 
-  expect(prixClient1).toEqual(5); // 1kg de tomate et 1 Kiwi
+  expect(prixClient1).toEqual(5); // 1kg de tomate et 1 Kiwi : 5€
   expect(messageClient1).toEqual(["Nous n'avons plus que 1 kilo de Tomate."]);
 
   // Et le client 2 juste après
@@ -28,7 +28,7 @@ it("On peut ajouter 2kg de tomates et 1 kiwi", () => {
     messages: messageClient2,
     stock: stockApresClient2,
   } = checkout(panierClient2, stockApresClient1);
-  expect(prixClient2).toEqual(2); // 1 Kiwi
+  expect(prixClient2).toEqual(2); // 1 Kiwi : 2€
   expect(messageClient2).toEqual([
     "Mince, nous n'avons plus de Tomate.",
     "Nous n'avons plus que 1 pièce de Kiwi.",

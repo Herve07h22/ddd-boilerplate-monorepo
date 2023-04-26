@@ -2,33 +2,41 @@ import {
   CommandHandler,
   makeCommandResponse,
   NamedAuthenticatedCommand,
-} from "../../infra/command/Command";
-import { UserRepository } from "../repository/UserRepository";
+} from "../../common/command/Command";
+import { IUserRepository } from "../interfaces/UserRepository";
 import { buildUniqueToken } from "../services/buildUniqueToken";
+import { z } from "zod";
+
+export const loginPayloadSchema = z.object({
+  username: z.string(),
+  password: z.string(),
+});
 
 export type LoginCommand = NamedAuthenticatedCommand<
   "Login",
-  {
-    username: string;
-    password: string;
-  }
+  z.infer<typeof loginPayloadSchema>,
+  { username: string; token: string }
 >;
 
-export const LoginHandler: CommandHandler<LoginCommand> =
-  (dependencies: { userRepository: UserRepository }) =>
-  (command: LoginCommand) => {
-    const user = dependencies.userRepository.getUserByUsernameAndPassword(
-      command.payload
-    );
+export const login: CommandHandler<
+  LoginCommand,
+  { userRepository: IUserRepository }
+> = (dependencies) => (command) => {
+  const user = dependencies.userRepository.getUserByUsernameAndPassword(
+    command.payload
+  );
 
-    if (user) {
-      const token = buildUniqueToken();
-      dependencies.userRepository.setTokenForUser({
-        token,
-        username: user.name,
-      });
-      return makeCommandResponse.withValue({ token });
-    }
+  if (user) {
+    const token = buildUniqueToken();
+    dependencies.userRepository.setTokenForUser({
+      token,
+      username: user.name,
+    });
+    return makeCommandResponse(command).withValue({
+      token,
+      username: user.name,
+    });
+  }
 
-    return makeCommandResponse.withError("Unknown user");
-  };
+  return makeCommandResponse(command).withError("Unknown user");
+};

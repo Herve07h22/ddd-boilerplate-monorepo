@@ -1,4 +1,4 @@
-import { NamedAuthenticatedCommand } from "../../infra/command/Command";
+import { NamedAuthenticatedCommand } from "../../common/command/Command";
 
 export type AddASlotCommand = NamedAuthenticatedCommand<
   "Add a slot",

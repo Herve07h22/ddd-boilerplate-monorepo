@@ -1,0 +1,32 @@
+.layout {
+  min-height: 100vh;
+}
+
+.content {
+  min-height: 280px;
+  padding: 24px;
+  /* background: #fff; */
+}
+
+.header {
+  border-top: solid 2px white;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items:center;
+  justify-content: space-between;
+}
+
+.sider {
+  border-top: solid 2px white;
+}
+
+.logo {
+  height: 32px;
+  margin: 16px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.login {
+  margin-left: auto;
+}

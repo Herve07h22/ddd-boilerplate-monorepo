@@ -1,6 +1,6 @@
-import { User } from "../../authentication/entities/User";
-import { UserRepository } from "../../authentication/repository/UserRepository";
-import { Event } from "../../infra/events/Event";
+import { User } from "../../authentication/models/User";
+import { IUserRepository } from "../../authentication/interfaces/UserRepository";
+import { Event } from "../../common/events/Event";
 import { EmailService } from "../../services/email/EmailService";
 
 export type SlotBooked = Event<
@@ -13,9 +13,12 @@ export type SlotBooked = Event<
 >;
 
 export const SendBookingConfirmations =
-  (emailService: EmailService, userRepository: UserRepository) =>
+  (dependencies: {
+    emailService: EmailService;
+    userRepository: IUserRepository;
+  }) =>
   (event: SlotBooked) => {
-    emailService.sendMail(
+    dependencies.emailService.sendMail(
       event.payload.user.name,
       "Your booking has been confirmed"
     );

@@ -1,7 +1,7 @@
-import { User } from "../entities/User";
-import { UserRepository } from "../repository/UserRepository";
+import { User } from "../models/User";
+import { IUserRepository } from "../interfaces/UserRepository";
 
-export class MemoryUserRepository implements UserRepository {
+export class MemoryUserRepository implements IUserRepository {
   private _users: User[] = [
     { name: "Joe", password: "password", role: "patient" },
   ];
@@ -27,5 +27,9 @@ export class MemoryUserRepository implements UserRepository {
     if (user) {
       user.token = token;
     }
+  }
+
+  listUsers() {
+    return this._users;
   }
 }
